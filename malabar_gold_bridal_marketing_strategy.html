@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9963D;
+    --gold-light: #E8C87A;
+    --gold-pale: #F7EDD8;
+    --gold-dark: #8B6520;
+    --onyx: #1A1614;
+    --onyx-mid: #2E2926;
+    --cream: #FAF6EF;
+    --blush: #F2E8DC;
+    --text-main: #1A1614;
+    --text-muted: #5C4F42;
+    --text-subtle: #9C8B7A;
+    --border: rgba(201,150,61,0.2);
+    --border-strong: rgba(201,150,61,0.45);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-main);
+    line-height: 1.6;
+  }
+
+  .hero {
+    background: var(--onyx);
+    padding: 56px 48px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,150,61,0.18) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 0.5px solid var(--gold-dark);
+    padding: 6px 18px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 300;
+    color: #F5EDDC;
+    letter-spacing: 1px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(245,237,220,0.6);
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+  }
+  .hero-divider {
+    width: 60px;
+    height: 0.5px;
+    background: var(--gold);
+    margin: 0 auto 32px;
+  }
+  .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--gold-light);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--onyx-mid);
+    overflow-x: auto;
+    border-bottom: 0.5px solid var(--border);
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(245,237,220,0.45);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 16px 22px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: rgba(245,237,220,0.75); }
+  .tab-btn.active {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold);
+  }
+
+  .content { display: none; }
+  .content.active { display: block; }
+
+  .section {
+    padding: 40px 48px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--onyx);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+  .section-title em { font-style: italic; color: var(--gold-dark); }
+
+  .prose {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 680px;
+  }
+
+  .big-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--onyx);
+    border-left: 3px solid var(--gold);
+    padding: 12px 0 12px 28px;
+    margin: 28px 0;
+    line-height: 1.4;
+    max-width: 640px;
+  }
+
+  .gold-card {
+    background: var(--onyx);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .gold-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .gold-card .card-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .gold-card p, .gold-card li {
+    color: rgba(245,237,220,0.82);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .gold-card h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #F5EDDC;
+    margin-bottom: 10px;
+  }
+
+  .three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .card {
+    background: white;
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+  }
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--gold-pale);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    color: var(--gold-dark);
+    font-size: 16px;
+  }
+  .card h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--onyx);
+    margin-bottom: 8px;
+  }
+  .card p, .card li {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .card ul { padding-left: 16px; }
+  .card li { margin-bottom: 4px; }
+
+  .tagline-box {
+    background: var(--gold-pale);
+    border: 0.5px solid var(--border-strong);
+    border-radius: 4px;
+    padding: 20px 28px;
+    margin: 10px 0;
+  }
+  .tagline-box .tl-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--onyx);
+    margin-bottom: 6px;
+  }
+  .tagline-box .tl-note {
+    font-size: 12px;
+    color: var(--text-subtle);
+    letter-spacing: 1px;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin: 24px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 0.5px;
+    background: var(--border-strong);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .tl-dot {
+    position: absolute;
+    left: -29px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 2px solid var(--cream);
+  }
+  .tl-phase {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .tl-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--onyx);
+    margin-bottom: 8px;
+  }
+  .tl-body {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .tl-body ul { padding-left: 16px; margin-top: 6px; }
+  .tl-body li { margin-bottom: 3px; }
+
+  .pill {
+    display: inline-block;
+    background: var(--gold-pale);
+    border: 0.5px solid var(--border-strong);
+    color: var(--gold-dark);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin: 3px 3px 3px 0;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .kpi-box {
+    background: var(--onyx);
+    border-radius: 4px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .kpi-box .kpi-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px;
+    color: var(--gold-light);
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .kpi-box .kpi-label {
+    font-size: 11px;
+    color: rgba(245,237,220,0.5);
+    letter-spacing: 1px;
+    line-height: 1.4;
+  }
+
+  .divider {
+    height: 0.5px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  .highlight-row {
+    background: var(--blush);
+    border-radius: 4px;
+    padding: 18px 24px;
+    margin: 10px 0;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .hr-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold);
+    min-width: 36px;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .hr-content h5 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--onyx);
+    margin-bottom: 4px;
+  }
+  .hr-content p { font-size: 13.5px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Malabar Gold &amp; Diamonds · Brand Strategy 2025</div>
+  <h1>Ek Se <em>Anant</em></h1>
+  <div class="hero-sub">One Necklace. Infinite Stories.</div>
+  <div class="hero-divider"></div>
+  <div class="hero-tagline">"From one occasion to every occasion — jewellery that grows with her."</div>
+</div>
+
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('brand')">Brand Foundation</button>
+  <button class="tab-btn" onclick="showTab('campaign')">Campaign Concept</button>
+  <button class="tab-btn" onclick="showTab('digital')">Digital &amp; Social</button>
+  <button class="tab-btn" onclick="showTab('influencer')">Influencer Strategy</button>
+  <button class="tab-btn" onclick="showTab('instore')">In-Store &amp; BTL</button>
+  <button class="tab-btn" onclick="showTab('roadmap')">Launch Roadmap</button>
+  <button class="tab-btn" onclick="showTab('kpis')">KPIs</button>
+</div>
+
+<!-- BRAND FOUNDATION -->
+<div id="brand" class="content active">
+
+  <div class="section">
+    <div class="section-label">Category Name</div>
+    <div class="section-title"><em>Ek Se Anant</em> — The Layered Bride Collection</div>
+    <div class="prose">
+      Meaning "from one, infinite" in Sanskrit — this name captures the modular philosophy beautifully. It is lyrical, aspirational, and deeply Indian while carrying a contemporary sensibility. The English translation, <em>The Layered Bride Collection</em>, serves as the sub-brand for pan-India retail and digital contexts.
+    </div>
+    <div class="gold-card" style="margin-top: 24px;">
+      <div class="card-label">Alternative Names Considered</div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;">
+        <div class="pill" style="background: rgba(201,150,61,0.15); border-color: rgba(201,150,61,0.3); color: var(--gold-light);">Anantam — The Infinite Layer</div>
+        <div class="pill" style="background: rgba(201,150,61,0.15); border-color: rgba(201,150,61,0.3); color: var(--gold-light);">The Stacked Bride</div>
+        <div class="pill" style="background: rgba(201,150,61,0.15); border-color: rgba(201,150,61,0.3); color: var(--gold-light);">Layers by Malabar</div>
+        <div class="pill" style="background: rgba(201,150,61,0.15); border-color: rgba(201,150,61,0.3); color: var(--gold-light);">The Bridalayer™</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Positioning Statement</div>
+    <div class="big-quote">
+      "For the modern Indian bride who refuses to stop at one moment, Ek Se Anant is the only bridal jewellery collection designed to multiply — in style, in occasion, in meaning — so her gold is as dynamic as she is."
+    </div>
+    <div class="prose" style="margin-top: 16px;">
+      <strong style="color: var(--onyx);">Category frame:</strong> Lifestyle jewellery within the bridal category.<br>
+      <strong style="color: var(--onyx);">Point of difference:</strong> The only certified modular bridal necklace system that transitions seamlessly from the mandap to the boardroom to the dinner table.<br>
+      <strong style="color: var(--onyx);">Reason to believe:</strong> Precision-engineered layering clasps, master craftsmanship, and 16g–46g weight range designed for all-day wearability.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Brand Story &amp; Emotional Hook</div>
+    <div class="section-title">She Didn't Inherit <em>One Story.</em></div>
+    <div class="prose">
+      There was a time when a bride's jewellery was locked in a velvet box after the wedding — too precious for Tuesday, too heavy for brunch, too specific for anything but that single sacred day. But she is not a single day. She is every morning she wakes up and chooses who she wants to be.
+    </div>
+    <div class="big-quote">
+      "Ek Se Anant was born from a simple truth: the woman who chose each other across a sacred fire also chose herself — every single day after."
+    </div>
+    <div class="prose">
+      The collection is a celebration of her plurality. The bride who dances at the sangeet and pitches to investors on Monday. The woman who wears her gold to a gala and to a girls' lunch. Each necklace layer is a chapter. Worn together, they tell her whole story. Worn alone, each speaks for a moment she is living right now.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Core Consumer Insight</div>
+    <div class="gold-card">
+      <div class="card-label">The Tension We're Unlocking</div>
+      <h4>"I spent more on my bridal jewellery than my first car. I've worn it exactly once."</h4>
+      <p>The modern urban Indian bride (24–35, upper-middle-class, social-media-fluent) experiences deep cognitive dissonance around bridal jewellery. She wants heirloom-quality gold but resents occasion-locked pieces. She is influenced by global styling trends and sees layered necklaces on every fashion feed she consumes. She wants to invest in jewellery that justifies itself over time — not just on her wedding day. Her deepest desire: jewellery that mirrors her identity — complex, versatile, and never finished.</p>
+    </div>
+    <div class="two-col" style="margin-top: 16px;">
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-trending-up" aria-hidden="true"></i></div>
+        <h4>Functional Desire</h4>
+        <p>Jewellery that serves her across ethnic, fusion, and western outfits. Pieces that stack for occasions and strip down for everyday luxury.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-heart" aria-hidden="true"></i></div>
+        <h4>Emotional Desire</h4>
+        <p>To feel like her jewellery belongs to her story — not just to one day. To show the world she is not defined by a single moment.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CAMPAIGN CONCEPT -->
+<div id="campaign" class="content">
+  <div class="section">
+    <div class="section-label">Core Campaign Idea</div>
+    <div class="section-title">The <em>#LayerHerStory</em> Campaign</div>
+    <div class="prose">
+      One necklace is a beginning. Multiple layers are a biography. The campaign invites real and aspirational Indian women to share the stories behind their layers — what each piece represents, which occasion it was worn for, which mood it matched. It turns jewellery into autobiography.
+    </div>
+    <div class="gold-card" style="margin-top: 20px;">
+      <div class="card-label">Campaign Concept Film — "The Chapters"</div>
+      <h4>A 90-second brand film told in 5 chapters</h4>
+      <p>We follow one woman — a bride on her wedding morning. Each subsequent chapter skips forward: the honeymoon dinner (one layer, effortless), the festive gathering (two layers, celebratory), the work event (a single delicate piece, powerful), the girls' night (full stack, joyful). The final frame: her daughter trying on the same piece years later. Voiceover: <em>"Some jewellery marks a day. Ek Se Anant marks a life."</em></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Taglines &amp; Messaging Directions</div>
+    <div class="section-title">Words That <em>Layer</em></div>
+
+    <div class="tagline-box">
+      <div class="tl-text">"Ek se anant — because you are more than one moment."</div>
+      <div class="tl-note">Primary brand tagline · Hindi/English · Emotional</div>
+    </div>
+    <div class="tagline-box">
+      <div class="tl-text">"Stack her story. Wear every version of her."</div>
+      <div class="tl-note">Social media &amp; digital · English · UGC hook</div>
+    </div>
+    <div class="tagline-box">
+      <div class="tl-text">"The necklace that attends every chapter of your life."</div>
+      <div class="tl-note">Retail &amp; in-store · English · Occasion versatility</div>
+    </div>
+    <div class="tagline-box">
+      <div class="tl-text">"Gold that grows with you."</div>
+      <div class="tl-note">Long-term brand message · Concise · Heirloom resonance</div>
+    </div>
+    <div class="tagline-box">
+      <div class="tl-text">"Ek din ke liye nahi. Har din ke liye."</div>
+      <div class="tl-note">Hindi tagline — "Not for one day. For every day." · Regional markets &amp; OOH</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Message Architecture</div>
+    <div class="three-col">
+      <div class="card">
+        <h4>For the Bride</h4>
+        <p>Your jewellery should be as multilayered as your identity. On your wedding day and every day after.</p>
+      </div>
+      <div class="card">
+        <h4>For the Gifter</h4>
+        <p>Don't give her one occasion. Give her infinite ones. Ek Se Anant — a gift she'll reach for forever.</p>
+      </div>
+      <div class="card">
+        <h4>For the Collector</h4>
+        <p>Start with one layer. Build a universe. Every piece you add is a new story you're choosing to live.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIGITAL & SOCIAL -->
+<div id="digital" class="content">
+  <div class="section">
+    <div class="section-label">Digital Marketing Strategy</div>
+    <div class="section-title"><em>Own</em> the Bridal Discovery Journey</div>
+    <div class="prose">The modern bride's jewellery journey begins on Instagram and ends in-store. Our digital strategy spans every touchpoint of that path — from aspiration to consideration to conversion.</div>
+
+    <div class="two-col" style="margin-top: 24px;">
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-device-mobile" aria-hidden="true"></i></div>
+        <h4>Instagram Strategy</h4>
+        <ul>
+          <li><strong>Reels-first content</strong> — "style 3 ways" videos showing layer combinations for ethnic, fusion, western looks</li>
+          <li><strong>Collab posts</strong> with fashion and bridal creators (see influencer tab)</li>
+          <li><strong>Story polls &amp; quizzes</strong> — "Which layer matches your personality?"</li>
+          <li><strong>Highlights:</strong> The Layering Guide, Real Brides, Styling Studio</li>
+          <li>Shopping tags on every product post for direct conversion</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-brand-youtube" aria-hidden="true"></i></div>
+        <h4>YouTube Strategy</h4>
+        <ul>
+          <li><strong>Long-form brand films</strong> (60–90 sec) anchored by #LayerHerStory narrative</li>
+          <li><strong>Mini docuseries:</strong> "Her Layers" — real modern brides sharing their jewellery philosophy</li>
+          <li><strong>Styling tutorials</strong> with celebrity stylists — "How I layer for 5 different looks"</li>
+          <li>YouTube Shorts mirror key Instagram Reels</li>
+          <li>Pre-roll ads on bridal content, wedding vlogs, and fashion channels</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-browser" aria-hidden="true"></i></div>
+        <h4>Website / Landing Page</h4>
+        <ul>
+          <li>Dedicated <em>ekSeanant.malabargold.com</em> microsite</li>
+          <li><strong>The Layer Builder</strong> — interactive digital tool to visualize combinations</li>
+          <li>Bridal quiz: "Build Your Stack" — personalized layer recommendations</li>
+          <li>Virtual try-on integration (AR)</li>
+          <li>Blog: "The Modern Bride's Jewellery Playbook"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-ad" aria-hidden="true"></i></div>
+        <h4>Paid Advertising</h4>
+        <ul>
+          <li><strong>Meta ads:</strong> Retargeting brides who visited bridal content. Lookalike audiences of existing Malabar customers</li>
+          <li><strong>Google:</strong> Target "bridal necklace", "layered gold necklace", "gold necklace set" — high-intent search terms</li>
+          <li><strong>YouTube pre-roll</strong> on bridal/wedding/fashion channels</li>
+          <li><strong>OTT/streaming</strong> — 15-sec spots on Hotstar during wedding-season content</li>
+          <li>Pinterest promoted pins (highly indexed for bridal search)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Content Pillars</div>
+    <div class="section-title">Six <em>Pillars</em> of Content</div>
+    <div class="three-col">
+      <div class="card">
+        <h4>01 · The Layer</h4>
+        <p>Educational content on how to stack, combine, and style. Positions Malabar as the authority on layered jewellery.</p>
+      </div>
+      <div class="card">
+        <h4>02 · The Bride</h4>
+        <p>Real modern brides, their stories, and their jewellery choices. Authentic, aspirational UGC-heavy content.</p>
+      </div>
+      <div class="card">
+        <h4>03 · The Occasion</h4>
+        <p>Showing the same collection worn across occasions — wedding, festive, casual, corporate. The versatility proof.</p>
+      </div>
+      <div class="card">
+        <h4>04 · The Craft</h4>
+        <p>Behind-the-scenes of the engineering — how the modular clasps work, the goldsmithing, the design process.</p>
+      </div>
+      <div class="card">
+        <h4>05 · The Community</h4>
+        <p>#LayerHerStory UGC. Resharing real women, creating community around the collection identity.</p>
+      </div>
+      <div class="card">
+        <h4>06 · The Gift</h4>
+        <p>Positioning individual layers as the new premium gifting. For anniversaries, milestones, and celebrations.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INFLUENCER -->
+<div id="influencer" class="content">
+  <div class="section">
+    <div class="section-label">Influencer &amp; Creator Strategy</div>
+    <div class="section-title">A <em>Layered</em> Influencer Architecture</div>
+    <div class="prose">We deploy a three-tier influencer strategy that mirrors the product's own layering philosophy — macro anchors, mid-tier amplifiers, and micro-layer authenticity creators.</div>
+
+    <div class="highlight-row" style="margin-top: 24px;">
+      <div class="hr-num">01</div>
+      <div class="hr-content">
+        <h5>Tier 1 — The Brand Faces (2–3 faces)</h5>
+        <p>Bollywood or regional celebrity brides who have recently married and are culturally relevant — e.g. a southern actress, a Hindi film star, a fashion designer. They wear Ek Se Anant at real public appearances, not just campaigns. This drives earned media and creates genuine celebrity association. Budget: ₹1.5–3 Cr per face for a 12-month contract.</p>
+      </div>
+    </div>
+    <div class="highlight-row">
+      <div class="hr-num">02</div>
+      <div class="hr-content">
+        <h5>Tier 2 — The Style Amplifiers (15–20 creators)</h5>
+        <p>Fashion and bridal influencers with 300K–3M followers across Instagram and YouTube. Bridalwear stylists, fashion bloggers, and bridal content creators. They create "style with me" and "how I styled my Ek Se Anant" content. Paid partnerships with creative freedom. 60-day exclusivity in bridal jewellery category. Budget: ₹8–25L per creator.</p>
+      </div>
+    </div>
+    <div class="highlight-row">
+      <div class="hr-num">03</div>
+      <div class="hr-content">
+        <h5>Tier 3 — The Real Brides Layer (50–100 micro creators)</h5>
+        <p>Real brides or newlywed women with 10K–150K followers. Authentic, trusted, and highly engaged. Gifting program — real brides receive a layer necklace and share their story organically. UGC is then amplified via Malabar's owned channels. Low cost, highest authenticity ROI.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Special Collaboration Formats</div>
+    <div class="two-col">
+      <div class="card">
+        <h4>The Designer Collab</h4>
+        <p>Co-create a limited edition "layer" with a celebrated Indian fashion designer (Sabyasachi, Tarun Tahiliani, or an emerging name). The limited run creates premium buzz and fashion press coverage. This elevates the product from jewellery to fashion object.</p>
+      </div>
+      <div class="card">
+        <h4>The Stylist Partnership</h4>
+        <p>Partner with 3–5 celebrity stylists who work with brides and Bollywood. They recommend Ek Se Anant to clients and create co-branded styling guides. Their audience of fashion-forward women is exactly the target consumer.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <h4>Creator Content Brief Framework</h4>
+      <p style="margin-bottom: 12px;">Every influencer brief includes these non-negotiables:</p>
+      <ul>
+        <li>Show the necklace in minimum 2 different styling contexts (e.g. with saree + with western outfit)</li>
+        <li>Demonstrate the modular layering feature — assemble or disassemble on camera</li>
+        <li>Mention price range and "starts from ₹X" to set accessibility expectations</li>
+        <li>Include call to action: "Link in bio" or "Visit Malabar Gold nearest to you"</li>
+        <li>Use brand hashtags: #EkSeAnant #LayerHerStory #MalabarBride</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- IN-STORE & BTL -->
+<div id="instore" class="content">
+  <div class="section">
+    <div class="section-label">In-Store Experience &amp; Visual Merchandising</div>
+    <div class="section-title">The <em>Layering Studio</em></div>
+    <div class="prose">Transform the Ek Se Anant in-store experience into a destination — not just a counter, but a private jewellery studio experience that mirrors the premium, personalised ethos of the brand.</div>
+
+    <div class="gold-card" style="margin-top: 24px;">
+      <div class="card-label">In-Store Experience Design</div>
+      <h4>The Layering Alcove</h4>
+      <p>A dedicated, ring-lit styling corner within flagship Malabar stores. Features: a full-length mirror with soft editorial lighting, a curated display of all Ek Se Anant layers in ascending weight, a styled "inspiration wall" showing celebrity and real-bride looks, and seating for a personal styling consultation. The space is photographable by design — encouraging in-store Instagram moments.</p>
+    </div>
+
+    <div class="two-col" style="margin-top: 16px;">
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-sparkles" aria-hidden="true"></i></div>
+        <h4>Visual Merchandising</h4>
+        <ul>
+          <li>Modular display stands that physically show layers "building up" — from one piece to five</li>
+          <li>Weight callouts on each display tag (16g starter → 46g full stack)</li>
+          <li>QR codes linking to styling videos for each piece</li>
+          <li>Campaign imagery on large-format prints: editorial, aspirational, modern bride</li>
+          <li>Co-ordinated packaging: black box with gold foil, each layer in its own compartment</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-user-heart" aria-hidden="true"></i></div>
+        <h4>Bridal Styling Consultations</h4>
+        <ul>
+          <li>"Layer Your Look" appointment — 45-min private session with a trained bridal stylist</li>
+          <li>Bride brings her lehenga/saree fabric swatch and the stylist builds a personalised stack</li>
+          <li>Digital lookbook emailed post-appointment with all combinations tried</li>
+          <li>Complimentary champagne/welcome drink — creates an event feeling</li>
+          <li>Consultation drives multi-piece purchase conversion significantly</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">BTL Activations</div>
+    <div class="three-col">
+      <div class="card">
+        <h4>Wedding Expo Presence</h4>
+        <p>Curated Ek Se Anant pop-ups at India's top wedding exhibitions — WedMeGood Expo, Bangalore Wedding Fair, Delhi Bridal Week. Live styling demos, try-on stations, and a "Build Your Stack" interactive kiosk.</p>
+      </div>
+      <div class="card">
+        <h4>The Bridal Trunk Show</h4>
+        <p>Invite-only private trunk shows hosted in premium hotels or private homes — 30–50 brides per city. Partnership with leading wedding planners to access their client list. Creates word-of-mouth among exactly the right consumers.</p>
+      </div>
+      <div class="card">
+        <h4>Pop-Up at Fashion Weeks</h4>
+        <p>An Ek Se Anant styling station at FDCI, Lakme Fashion Week, and regional fashion events. Stylists on-site. Necklaces worn by designers' models on the runway create organic fashion press coverage.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">PR Opportunities</div>
+    <div class="two-col">
+      <div class="card">
+        <h4>Media &amp; Editorial</h4>
+        <ul>
+          <li>Exclusive features in Vogue India, Harper's Bazaar India, Elle India: "The New Bridal Layering"</li>
+          <li>Press preview event: invite top fashion journalists to a private "Layer Experience" dinner</li>
+          <li>Bridal magazine cover shoots featuring Ek Se Anant</li>
+          <li>Pitch to Brides Today, WedMeGood, WeddingWire India for editorial coverage</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Celebrity &amp; Event PR</h4>
+        <ul>
+          <li>Gift Ek Se Anant to celebrity brides pre-wedding — earn organic social media moments</li>
+          <li>Dress high-profile brides for their wedding appearances (earned media)</li>
+          <li>Red carpet placements at award shows and film premieres</li>
+          <li>Pitch the "modular bridal jewellery" concept as a trend story to national publications</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LAUNCH ROADMAP -->
+<div id="roadmap" class="content">
+  <div class="section">
+    <div class="section-label">Launch Campaign Roadmap</div>
+    <div class="section-title">Three Phases. <em>One Story.</em></div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">Phase 1 · Months 1–2</div>
+        <div class="tl-title">The Whisper — Pre-Launch</div>
+        <div class="tl-body">
+          Build desire before the reveal. Create anticipation among the target audience.
+          <ul>
+            <li>Teaser campaign on Instagram: silhouette imagery of layered necklaces with the line <em>"Something is about to layer up."</em></li>
+            <li>Seed Tier 1 influencers with the collection under NDA — they wear it at real events to spark curiosity</li>
+            <li>Press briefings with top fashion editors for a coordinated launch story</li>
+            <li>Internal training: all Malabar store staff trained on the product concept, layering philosophy, and styling guidance</li>
+            <li>Build the Layering Studio alcoves in 10 flagship stores across metros</li>
+            <li>Develop the microsite and Layer Builder digital tool</li>
+            <li>Identify and confirm 50 micro-bride creators for gifting program</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">Phase 2 · Month 3 (Wedding Season Timing)</div>
+        <div class="tl-title">The Reveal — Launch Week</div>
+        <div class="tl-body">
+          A coordinated, high-visibility launch that creates cultural momentum.
+          <ul>
+            <li><strong>Day 1 — The Film Drop:</strong> 90-sec brand film "The Chapters" released across YouTube, Instagram, and Facebook simultaneously. All Tier 1 influencers share on the same day</li>
+            <li><strong>Day 1 — Press Coverage:</strong> Coordinated editorial in Vogue India, Harper's Bazaar India, leading wedding publications</li>
+            <li><strong>Day 2 — The Event:</strong> A launch event in Mumbai (flagship city) — intimate press + influencer dinner at a premium venue. Real-time Instagram coverage</li>
+            <li><strong>Day 3–7:</strong> Tier 2 influencer content drops — "unboxing + style with me" videos cascade across the week</li>
+            <li><strong>Week 1:</strong> Go live with Meta and Google paid campaigns. Activate Pinterest promoted pins. Launch microsite and Layer Builder tool</li>
+            <li><strong>Week 2:</strong> First wave of micro-bride UGC seeded — reshare on Malabar's channels</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">Phase 3 · Months 4–12</div>
+        <div class="tl-title">The Layer — Sustain &amp; Deepen</div>
+        <div class="tl-body">
+          Build the collection into a perennial category. Sustain relevance across the full year.
+          <ul>
+            <li><strong>Months 4–6:</strong> "Her Layers" YouTube docuseries — one real bride per episode, released bi-weekly. Deep engagement content</li>
+            <li><strong>Month 5:</strong> Bridal trunk shows across 6 cities — Mumbai, Delhi, Bangalore, Hyderabad, Chennai, Kochi</li>
+            <li><strong>Diwali window (Month 6–7):</strong> Festive gifting campaign — "Layer Her with Love." Position individual necklaces as festival gifts</li>
+            <li><strong>Month 7:</strong> Limited edition designer collab drop — creates fresh press cycle and premium halo</li>
+            <li><strong>Month 8:</strong> Wedding expo season — presence at top bridal fairs nationally</li>
+            <li><strong>Year-end:</strong> Anniversary campaign — "365 Days. Infinite Layers." UGC celebration of one year of the collection. Community contest: share how many occasions you've worn your stack</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Cross-Selling &amp; Upselling Opportunities</div>
+    <div class="section-title">The <em>Stack Economy</em></div>
+    <div class="three-col">
+      <div class="card">
+        <h4>The Starter Stack</h4>
+        <p>Entry purchase of 1 layer (16g). Positioned as the bridal gift or self-purchase. In-store consultation reveals complementary layers. Follow-up within 60 days: "Complete your stack" push notification / email.</p>
+      </div>
+      <div class="card">
+        <h4>Anniversary Add-On</h4>
+        <p>CRM trigger at 6-month and 1-year anniversaries. "Add a new chapter to her stack." Personalised recommendations based on what she already owns. Creates repeat purchase behavior with emotional framing.</p>
+      </div>
+      <div class="card">
+        <h4>The Complete Story</h4>
+        <p>Position the full 3–5 layer set (approaching 46g) as the aspirational "complete collection." Bridal package pricing that bundles layers at a compelling value vs. single purchases. In-store display always shows the full stack.</p>
+      </div>
+    </div>
+    <div class="gold-card" style="margin-top: 16px;">
+      <div class="card-label">Cross-Category Opportunities</div>
+      <p>Natural cross-sell into matching earrings designed to complement the layered necklace aesthetic; a coordinated bracelet stack collection that mirrors the necklace layering concept; and a "The Complete Layer Look" — necklace + earrings + bracelet bundle for brides who want a complete modular trousseau.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Customer Engagement Strategy</div>
+    <div class="section-title">The <em>Ek Se Anant</em> Community</div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-users" aria-hidden="true"></i></div>
+        <h4>The Layered Brides Club</h4>
+        <p>A CRM loyalty program specific to Ek Se Anant buyers. Members receive early access to new layers, invite-only trunk show invitations, personal styling calls, and "stack anniversary" reminders. Creates a community of brand ambassadors who feel seen and valued.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-hash" aria-hidden="true"></i></div>
+        <h4>#LayerHerStory UGC Engine</h4>
+        <p>Monthly UGC contests — "Show us your layer this month." Winners featured on Malabar's national Instagram. Monthly theme: January = Festive, February = Anniversary, March = Work Luxe. Keeps community engaged year-round with fresh, authentic content.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div id="kpis" class="content">
+  <div class="section">
+    <div class="section-label">Key Performance Indicators</div>
+    <div class="section-title">Measuring What <em>Matters</em></div>
+
+    <div class="kpi-grid">
+      <div class="kpi-box">
+        <div class="kpi-num">₹50Cr</div>
+        <div class="kpi-label">Year 1 revenue target from collection</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">2.4×</div>
+        <div class="kpi-label">Target average pieces per bridal transaction</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">35%</div>
+        <div class="kpi-label">Post-wedding repeat purchase rate target (Y1)</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">5M+</div>
+        <div class="kpi-label">Campaign reach target across digital channels</div>
+      </div>
+    </div>
+
+    <div class="three-col" style="margin-top: 8px;">
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+        <h4>Brand &amp; Awareness</h4>
+        <ul>
+          <li>Branded search volume for "Ek Se Anant" and "Malabar layered necklace"</li>
+          <li>Social media share of voice in bridal jewellery category</li>
+          <li>Campaign hashtag reach and UGC volume (#LayerHerStory)</li>
+          <li>Press coverage AVE (advertising value equivalent)</li>
+          <li>Top-of-mind recall in bridal jewellery category (survey-based, bi-annual)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-shopping-cart" aria-hidden="true"></i></div>
+        <h4>Commercial</h4>
+        <ul>
+          <li>Average transaction value (bridal category) vs. pre-launch baseline</li>
+          <li>Multi-piece purchase rate (% of buyers purchasing 2+ layers)</li>
+          <li>Category revenue as % of total Malabar bridal revenue</li>
+          <li>New-to-brand customers acquired through the campaign</li>
+          <li>In-store conversion rate from styling consultation to purchase</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="ti ti-repeat" aria-hidden="true"></i></div>
+        <h4>Loyalty &amp; Engagement</h4>
+        <ul>
+          <li>Post-wedding repeat purchase rate within 12 months</li>
+          <li>Layered Brides Club membership growth</li>
+          <li>Email and WhatsApp CRM open rates for collection communications</li>
+          <li>Net Promoter Score from post-purchase survey</li>
+          <li>Average lifetime value uplift for Ek Se Anant buyers vs. standard bridal buyers</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Digital KPIs</div>
+    <div class="two-col">
+      <div class="card">
+        <h4>Social Media</h4>
+        <ul>
+          <li>Instagram: 3M+ Reel views in launch month</li>
+          <li>YouTube: 500K+ brand film views within 30 days</li>
+          <li>Engagement rate: 5%+ on collection posts (vs. category avg 2–3%)</li>
+          <li>UGC pieces created: 2,000+ within first 6 months</li>
+          <li>Influencer earned media value: ₹5Cr+ equivalent</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Performance Marketing</h4>
+        <ul>
+          <li>Cost per quality lead (consultation booking): below ₹800</li>
+          <li>Return on ad spend (ROAS): 4× minimum on paid social</li>
+          <li>Microsite traffic: 200K+ visits in first 60 days</li>
+          <li>Layer Builder tool engagement: 50K+ sessions</li>
+          <li>WhatsApp and in-store appointment conversion: 30%+</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gold-card" style="margin-top: 16px;">
+      <div class="card-label">The North Star Metric</div>
+      <h4>Post-Wedding Wear Rate</h4>
+      <p>The singular metric that proves we have repositioned bridal jewellery from occasion-locked to lifestyle-relevant. Tracked via a 6-month post-purchase survey: "How many times have you worn your Ek Se Anant necklace since your wedding?" Target: 80%+ of buyers report wearing at least one layer post-wedding. This is the proof point that changes the category — and the story we tell the industry.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
